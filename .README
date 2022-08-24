@@ -1,0 +1,11 @@
+=== Video repair app ===
+
+Agregamos este readme para explicar que este es primer guardado
+de proyecto. La aplicación esta hecha para convertir + reparar 
+varios problemas en video profesional, como reducción ruido electronico
+generado por calentamiento sensor, problemas de shutter, etc. 
+Tendra interfaz mínima en React, porque el problema que trata de resolver
+implica mejora de video. Siempre convierte a ProRes (a resolver) porque
+es el formato profesional en que se trabaja mas en Chile.
+
+Saludos. Mau.
