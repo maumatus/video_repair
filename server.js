@@ -28,11 +28,10 @@ ffmpeg()
   .addOptions(['-pix_fmt yuva444p10le', '-profile:v 3'])
   
   .videoFilters(
-      {
-        filter: 'atadenoise',
-        //options: { a:0.02, b:0.04, a:0.02, b:15, a:0.02, b:0.02, s:9, p:'all', a:'p', s:32767  }
-      }
-    ) 
+    {
+      filter: "atadenoise=0a=0.02:1a=0.02:2a=0.02:0b=0.04:1b=0.04:2b=0.04:s=9:p=all"//Opciones funcionaron asi. Entender.
+    }
+  ) 
   .toFormat('mov')
   .on('progress', function(progress) {
     console.log('Progreso ' + Object.keys(progress));
