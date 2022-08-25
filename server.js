@@ -1,47 +1,72 @@
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-const ffmpeg = require('fluent-ffmpeg');
-ffmpeg.setFfmpegPath(ffmpegPath);
+const express = require('express')
+const app = express()
+const PORT = 3000;
 
+//Importamos los modulos con los distintos motores "denoiser"
+const ATADENOISE = require('./routers/atadenoise');  
+const ATADENOISE = require('./routers/bitplanedenoise');  
+const ATADENOISE = require('./routers/dctdnoiz');  
+const ATADENOISE = require('./routers/fftdnoiz');  
+const ATADENOISE = require('./routers/nlmeans');  
+const ATADENOISE = require('./routers/owdenoise');  
+const ATADENOISE = require('./routers/vaguedenoiser');  
 
-//Obtenemos Metadata
-/*
-ffmpeg.ffprobe('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/noche.avi', (data, err)=> {
-  if (err) {
-    console.log(err)
-  } else {
-    console.log(data)
-  }
+//Construimos 7 enrutadores para los distintos metodos de "Reduccion de ruido".
+const router1 = express.Router();
+const router2 = express.Router();
+const router3 = express.Router();
+const router4 = express.Router();
+const router5 = express.Router();
+const router6 = express.Router();
+const router7 = express.Router();
+
+//Aqui construimos el enrutador con Node-Express
+router1.post('/nlmeans', function (req, res, next) {
+  console.log("Router1 funcionando");
+  res.end();
 });
-*/
 
-//Probamos procesar tamaño video
-ffmpeg()
-  .input('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/video.avi')
-  //.inputFormat('avi')
-  .FPSOutput(24)
-  .size('1920x1080')
-  //.videoCodec('libx264rgb')
-  //.videoBitrate('30000k')
-  .videoCodec('prores_ks')
-  
-  //.addOptions(['-pix_fmt yuv422p10le', '-profile:v 3'])
-  .addOptions(['-pix_fmt yuva444p10le', '-profile:v 3'])
-  
-  .videoFilters(
-    {
-      filter: "atadenoise=0a=0.02:1a=0.02:2a=0.02:0b=0.04:1b=0.04:2b=0.04:s=9:p=all"//Opciones funcionaron asi. Entender.
-    }
-  ) 
-  .toFormat('mov')
-  .on('progress', function(progress) {
-    console.log('Progreso ' + Object.keys(progress));
-    console.log('Progreso ' + progress.frames + progress);
-  })
-  .output('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage_salida/noche-salidav2.mov')
-  .on('error', function(err) {
-  console.log(err);
-  })
-  .on('end', function() {
-    console.log('Processing finished !');
-  })
-  .run();
+router2.post('/atadenoise', function (req, res, next) {
+  console.log("Router1 funcionando");
+  res.end();
+});
+
+router3.post('/bitplanedenoise', function (req, res, next) {
+  console.log("Router1 funcionando");
+  res.end();
+});
+
+router4.post('/dctdnoiz', function (req, res, next) {
+  console.log("Router1 funcionando");
+  res.end();
+});
+
+router5.post('/fftdnoiz', function (req, res, next) {
+  console.log("Router1 funcionando");
+  res.end();
+});
+
+router6.post('/owdenoise', function (req, res, next) {
+  console.log("Router1 funcionando");
+  res.end();
+});
+
+router7.post('/vaguedenoiser', function (req, res, next) {
+  console.log("Router1 funcionando");
+  res.end();
+});
+
+app.use(router1);
+app.use(router2);
+app.use(router3);
+app.use(router4);
+app.use(router5);
+app.use(router6);
+app.use(router7);
+
+
+//Server
+app.listen(PORT, function (err) {
+  if (err) console.log(err);
+  console.log(`Ejecutando servidor en http://localhost:${PORT}`)
+});
