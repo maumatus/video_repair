@@ -17,7 +17,7 @@ ffmpeg()
   
   .videoFilters(
     {
-      filter: "atadenoise=0a=0.02:1a=0.02:2a=0.02:0b=0.04:1b=0.04:2b=0.04:s=9:p=all"//Opciones funcionaron asi. Entender.
+      filter: "vaguedenoiser=threshold=2:method=garrote:nsteps=6:percent=85:planes=all:type=universal"//Opciones funcionaron asi. Entender.
     }
   ) 
   .toFormat('mov')

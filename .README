@@ -9,3 +9,264 @@ implica mejora de video. Siempre convierte a ProRes (a resolver) porque
 es el formato profesional en que se trabaja mas en Chile.
 
 Saludos. Mau.
+
+
+
+
+Descripción de los filtros:
+
+
+---------------------- 01 - atadenoise -----------------------------
+
+Apply an Adaptive Temporal Averaging Denoiser to the video input.
+
+The filter accepts the following options:
+
+0a
+
+    Set threshold A for 1st plane. Default is 0.02. Valid range is 0 to 0.3.
+0b
+
+    Set threshold B for 1st plane. Default is 0.04. Valid range is 0 to 5.
+1a
+
+    Set threshold A for 2nd plane. Default is 0.02. Valid range is 0 to 0.3.
+1b
+
+    Set threshold B for 2nd plane. Default is 0.04. Valid range is 0 to 5.
+2a
+
+    Set threshold A for 3rd plane. Default is 0.02. Valid range is 0 to 0.3.
+2b
+
+    Set threshold B for 3rd plane. Default is 0.04. Valid range is 0 to 5.
+
+    Threshold A is designed to react on abrupt changes in the input signal and threshold B is designed to react on continuous changes in the input signal.
+s
+
+    Set number of frames filter will use for averaging. Default is 9. Must be odd number in range [5, 129].
+p
+
+    Set what planes of frame filter will use for averaging. Default is all.
+a
+
+    Set what variant of algorithm filter will use for averaging. Default is p parallel. Alternatively can be set to s serial.
+
+    Parallel can be faster then serial, while other way around is never true. Parallel will abort early on first change being greater then thresholds, while serial will continue processing other side of frames if they are equal or below thresholds.
+0s
+1s
+2s
+
+    Set sigma for 1st plane, 2nd plane or 3rd plane. Default is 32767. Valid range is from 0 to 32767. This options controls weight for each pixel in radius defined by size. Default value means every pixel have same weight. Setting this option to 0 effectively disables filtering. 
+
+39.6.1 Commands
+
+This filter supports same commands as options except option s. The command accepts the same syntax of the corresponding option. 
+
+
+
+
+
+---------------------- 02 - dctdnoiz -----------------------------
+
+39.50 dctdnoiz
+
+Denoise frames using 2D DCT (frequency domain filtering).
+
+This filter is not designed for real time.
+
+The filter accepts the following options:
+
+sigma, s
+
+    Set the noise sigma constant.
+
+    This sigma defines a hard threshold of 3 * sigma; every DCT coefficient (absolute value) below this threshold with be dropped.
+
+    If you need a more advanced filtering, see expr.
+
+    Default is 0.
+overlap
+
+    Set number overlapping pixels for each block. Since the filter can be slow, you may want to reduce this value, at the cost of a less effective filter and the risk of various artefacts.
+
+    If the overlapping value doesn’t permit processing the whole input width or height, a warning will be displayed and according borders won’t be denoised.
+
+    Default value is blocksize-1, which is the best possible setting.
+expr, e
+
+    Set the coefficient factor expression.
+
+    For each coefficient of a DCT block, this expression will be evaluated as a multiplier value for the coefficient.
+
+    If this is option is set, the sigma option will be ignored.
+
+    The absolute value of the coefficient can be accessed through the c variable.
+n
+
+    Set the blocksize using the number of bits. 1<<n defines the blocksize, which is the width and height of the processed blocks.
+
+    The default value is 3 (8x8) and can be raised to 4 for a blocksize of 16x16. Note that changing this setting has huge consequences on the speed processing. Also, a larger block size does not necessarily means a better de-noising. 
+
+39.50.1 Examples
+
+Apply a denoise with a sigma of 4.5:
+
+dctdnoiz=4.5
+
+The same operation can be achieved using the expression system:
+
+dctdnoiz=e='gte(c, 4.5*3)'
+
+Violent denoise using a block size of 16x16:
+
+dctdnoiz=15:n=4
+
+
+
+
+---------------------- 03 - fftdnoiz -----------------------------
+
+Denoise frames using 3D FFT (frequency domain filtering).
+
+The filter accepts the following options:
+
+sigma
+
+    Set the noise sigma constant. This sets denoising strength. Default value is 1. Allowed range is from 0 to 30. Using very high sigma with low overlap may give blocking artifacts.
+amount
+
+    Set amount of denoising. By default all detected noise is reduced. Default value is 1. Allowed range is from 0 to 1.
+block
+
+    Set size of block in pixels, Default is 32, can be 8 to 256.
+overlap
+
+    Set block overlap. Default is 0.5. Allowed range is from 0.2 to 0.8.
+method
+
+    Set denoising method. Default is wiener, can also be hard.
+prev
+
+    Set number of previous frames to use for denoising. By default is set to 0.
+next
+
+    Set number of next frames to to use for denoising. By default is set to 0.
+planes
+
+    Set planes which will be filtered, by default are all available filtered except alpha. 
+
+
+
+---------------------------- 04 - nlmeans -------------------------------
+
+39.167 nlmeans
+
+Denoise frames using Non-Local Means algorithm.
+
+Each pixel is adjusted by looking for other pixels with similar contexts. This context similarity is defined by comparing their surrounding patches of size pxp. Patches are searched in an area of rxr around the pixel.
+
+Note that the research area defines centers for patches, which means some patches will be made of pixels outside that research area.
+
+The filter accepts the following options.
+
+s
+
+    Set denoising strength. Default is 1.0. Must be in range [1.0, 30.0].
+p
+
+    Set patch size. Default is 7. Must be odd number in range [0, 99].
+pc
+
+    Same as p but for chroma planes.
+
+    The default value is 0 and means automatic.
+r
+
+    Set research size. Default is 15. Must be odd number in range [0, 99].
+rc
+
+    Same as r but for chroma planes.
+
+    The default value is 0 and means automatic. 
+
+
+------------------------------ 05 - owdenoise -------------------------------
+
+39.178 owdenoise
+
+Apply Overcomplete Wavelet denoiser.
+
+The filter accepts the following options:
+
+depth
+
+    Set depth.
+
+    Larger depth values will denoise lower frequency components more, but slow down filtering.
+
+    Must be an int in the range 8-16, default is 8.
+luma_strength, ls
+
+    Set luma strength.
+
+    Must be a double value in the range 0-1000, default is 1.0.
+chroma_strength, cs
+
+    Set chroma strength.
+
+    Must be a double value in the range 0-1000, default is 1.0. 
+
+----------------------------- 06 - vaguedenoiser -----------------------------------
+
+39.262 vaguedenoiser
+
+Apply a wavelet based denoiser.
+
+It transforms each frame from the video input into the wavelet domain, using Cohen-Daubechies-Feauveau 9/7. Then it applies some filtering to the obtained coefficients. It does an inverse wavelet transform after. Due to wavelet properties, it should give a nice smoothed result, and reduced noise, without blurring picture features.
+
+This filter accepts the following options:
+
+threshold
+
+    The filtering strength. The higher, the more filtered the video will be. Hard thresholding can use a higher threshold than soft thresholding before the video looks overfiltered. Default value is 2.
+method
+
+    The filtering method the filter will use.
+
+    It accepts the following values:
+
+    ‘hard’
+
+        All values under the threshold will be zeroed.
+    ‘soft’
+
+        All values under the threshold will be zeroed. All values above will be reduced by the threshold.
+    ‘garrote’
+
+        Scales or nullifies coefficients - intermediary between (more) soft and (less) hard thresholding. 
+
+    Default is garrote.
+nsteps
+
+    Number of times, the wavelet will decompose the picture. Picture can’t be decomposed beyond a particular point (typically, 8 for a 640x480 frame - as 2^9 = 512 > 480). Valid values are integers between 1 and 32. Default value is 6.
+percent
+
+    Partial of full denoising (limited coefficients shrinking), from 0 to 100. Default value is 85.
+planes
+
+    A list of the planes to process. By default all planes are processed.
+type
+
+    The threshold type the filter will use.
+
+    It accepts the following values:
+
+    ‘universal’
+
+        Threshold used is same for all decompositions.
+    ‘bayes’
+
+        Threshold used depends also on each decomposition coefficients. 
+
+    Default is universal. 

@@ -33,3 +33,7 @@ ffmpeg()
     console.log('Processing finished !');
   })
   .run();
+
+
+  //Nos falta crear una funcion por cada modulo, asi esta funcion procesa el video
+  //Segun peticiones con parametros desde frontend

@@ -17,7 +17,7 @@ ffmpeg()
   
   .videoFilters(
     {
-      filter: "atadenoise=0a=0.02:1a=0.02:2a=0.02:0b=0.04:1b=0.04:2b=0.04:s=9:p=all"//Opciones funcionaron asi. Entender.
+      filter: "nlmeans=s=1.0:p=7:pc=0:r=15:rc=0"//Opciones funcionaron asi. Entender.
     }
   ) 
   .toFormat('mov')

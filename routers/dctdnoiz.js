@@ -17,7 +17,7 @@ ffmpeg()
   
   .videoFilters(
     {
-      filter: "atadenoise=0a=0.02:1a=0.02:2a=0.02:0b=0.04:1b=0.04:2b=0.04:s=9:p=all"//Opciones funcionaron asi. Entender.
+      filter: "dctdnoiz=sigma=15:n=4"//Modificarlos con variables desde front. Define Sigma(default 0-15) y blocksize(default 3-4).
     }
   ) 
   .toFormat('mov')
