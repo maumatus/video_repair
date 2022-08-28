@@ -4,30 +4,31 @@ const PORT = 3000;
 
 //Importamos los modulos con los distintos motores "denoiser".PENDIENTE.
 //Cambiar por destructuracion para importar funcion y utilizar c/u en este enrutador.
-const { atadenoise } = require('./routers/atadenoise');  ;  
+const  atadenoise  = require('./routers/atadenoise');
+/*  
 const { dctdnoiz } = require('./routers/dctdnoiz');  
 const { fftdnoiz } = require('./routers/fftdnoiz');  
 const { nlmeans } = require('./routers/nlmeans');  
 const { owdenoise } = require('./routers/owdenoise');  
 const { vaguedenoiser } = require('./routers/vaguedenoiser');  
-
-//Construimos 7 enrutadores para los distintos metodos de "Reduccion de ruido".
-const router1 = express.Router();
-const router2 = express.Router();
-const router3 = express.Router();
-const router4 = express.Router();
-const router5 = express.Router();
-const router6 = express.Router();
-
+*/
 //Aqui construimos el enrutador con rutas de Node-Express
-router1.post('/atadenoise', function (req, res, next) {
-  let dirEntrada = '/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/noche1.avi';
-  let dirSalida = '/Volumes/SSD_02/Desarrollo_ProcVideo/Footage_salida/atadenoise.mov';
-  atadenoise(dirEntrada, dirSalida);
-  console.log("Router1 funcionando");
+app.get('/atadenoise', function (req, res, next) {
+  //Inicializamos variables
+  const dirEntrada = '/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/noche1.avi';
+  const dirSalida = '/Volumes/SSD_02/Desarrollo_ProcVideo/Footage_salida/atadenoise.mov';
+  const th0A = 0.02;
+  const th1A = 0.02;
+  const th2A = 0.02;
+  const th0B = 0.04;
+  const th1B = 0.04;
+  const th2B = 0.04;
+  const planosPromedio = 10;
+
+  atadenoise(dirEntrada, dirSalida, th0A, th1A, th2A, th0B, th1B, th2B, planosPromedio);
   res.end();
 });
-
+/*
 router2.post('/dctdnoiz', function (req, res, next) {
   dctdnoiz();
   console.log("Router1 funcionando");
@@ -65,8 +66,7 @@ app.use(router3);
 app.use(router4);
 app.use(router5);
 app.use(router6);
-
-
+*/
 //Server escuchando
 app.listen(PORT, function (err) {
   if (err) console.log(err);

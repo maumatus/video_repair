@@ -2,7 +2,7 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 
-function vaguedenoiser() {
+module.exports = function vaguedenoiser() {
   ffmpeg()
     .input('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/noche1.avi')
     //.inputFormat('avi')
@@ -34,5 +34,3 @@ function vaguedenoiser() {
     })
     .run();
 };
-
-export default vaguedenoiser();

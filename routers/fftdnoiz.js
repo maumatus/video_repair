@@ -2,7 +2,7 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 
-function fftdnoiz() {
+module.exports = function fftdnoiz() {
   ffmpeg()
     .input('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/noche1.avi')
     //.inputFormat('avi')
@@ -34,4 +34,3 @@ function fftdnoiz() {
     })
     .run();
 };
-export default fftdnoiz();
