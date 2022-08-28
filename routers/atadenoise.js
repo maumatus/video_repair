@@ -3,7 +3,7 @@ const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 //Encapsulamos el modulo dentro de funcion.
-function atadenoise(entrada, salida) {
+function atadenoise(entrada, salida, thresholdAp1, thresholdBp1, thresholdAp2, thresholdBp2, thresholdAp3, thresholdBp3, planosPromedio, planosFilter ) {
   ffmpeg()
     //.input('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/noche1.avi')
     .input(entrada)
@@ -19,8 +19,9 @@ function atadenoise(entrada, salida) {
     
     .videoFilters(
       {
-        filter: "atadenoise=0a=0.03:1a=0.03:2a=0.03:0b=0.07:1b=0.07:2b=0.07:s=20:p=all"//Opciones funcionaron asi. Entender.
+        filter: `"atadenoise=0a=${thresholdAp1}:1a=${thresholdAp2}:2a=${thresholdAp3}:0b=${thresholdBp1}:1b=${thresholdBp2}:2b=${thresholdBp3}:s=${planosPromedio}:p=${planosFilter}"`
       }
+      //filter: "atadenoise=0a=0.03:1a=0.03:2a=0.03:0b=0.07:1b=0.07:2b=0.07:s=20:p=all"
     ) 
     .toFormat('mov')
     .on('progress', function(progress) {
