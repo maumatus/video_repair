@@ -4,7 +4,7 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 
 //Probamos procesar tamaño video
 ffmpeg()
-  .input('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/video.avi')
+  .input('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/noche1.avi')
   //.inputFormat('avi')
   .FPSOutput(24)
   .size('1920x1080')
@@ -17,7 +17,7 @@ ffmpeg()
   
   .videoFilters(
     {
-      filter: "nlmeans=s=1.0:p=7:pc=0:r=15:rc=0"//Opciones funcionaron asi. Entender.
+      filter: "nlmeans=s=2.0:p=7:pc=0:r=15:rc=0"//Opciones funcionaron asi. Entender.
     }
   ) 
   .toFormat('mov')
@@ -25,7 +25,7 @@ ffmpeg()
     console.log('Progreso ' + Object.keys(progress));
     console.log('Progreso ' + progress.frames + progress);
   })
-  .output('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage_salida/noche-salidav2.mov')
+  .output('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage_salida/nlmeans.mov')
   .on('error', function(err) {
   console.log(err);
   })
