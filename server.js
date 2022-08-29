@@ -17,13 +17,13 @@ app.get('/atadenoise', function (req, res, next) {
   //Inicializamos variables
   const dirEntrada = '/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/noche1.avi';
   const dirSalida = '/Volumes/SSD_02/Desarrollo_ProcVideo/Footage_salida/atadenoise.mov';
-  const th0A = 0.02;
-  const th1A = 0.02;
-  const th2A = 0.02;
-  const th0B = 0.04;
-  const th1B = 0.04;
-  const th2B = 0.04;
-  const planosPromedio = 10;
+  var th0A = 0.02;
+  var th1A = 0.02;
+  var th2A = 0.02;
+  var th0B = 0.04;
+  var th1B = 0.04;
+  var th2B = 0.04;
+  var planosPromedio = 10;
 
   atadenoise(dirEntrada, dirSalida, th0A, th1A, th2A, th0B, th1B, th2B, planosPromedio);
   res.end();
