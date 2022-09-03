@@ -2,30 +2,20 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 
-module.exports = function nlmeans() {
+module.exports = function dctdnoiz(entrada, salida, sigma, n) {
   ffmpeg()
-    .input('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/noche1.avi')
-    //.inputFormat('avi')
+    .input(entrada)
     .FPSOutput(24)
     .size('1920x1080')
-    //.videoCodec('libx264rgb')
-    //.videoBitrate('30000k')
     .videoCodec('prores_ks')
-    
-    //.addOptions(['-pix_fmt yuv422p10le', '-profile:v 3'])
     .addOptions(['-pix_fmt yuva444p10le', '-profile:v 3'])
-    
-    .videoFilters(
-      {
-        filter: "nlmeans=s=2.0:p=7:pc=0:r=15:rc=0"//Opciones funcionaron asi. Entender.
-      }
-    ) 
+    .videoFilters([`dctdnoiz=${sigma}:${n}`])
     .toFormat('mov')
     .on('progress', function(progress) {
       console.log('Progreso ' + Object.keys(progress));
       console.log('Progreso ' + progress.frames + progress);
     })
-    .output('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage_salida/nlmeans.mov')
+    .output(salida)
     .on('error', function(err) {
     console.log(err);
     })

@@ -2,30 +2,20 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 
-module.exports = function dctdnoiz() {
+module.exports = function fftdnoiz(entrada, salida, sig, amount) {
   ffmpeg()
-    .input('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage/noche1.avi')
-    //.inputFormat('avi')
+    .input(entrada)
     .FPSOutput(24)
     .size('1920x1080')
-    //.videoCodec('libx264rgb')
-    //.videoBitrate('30000k')
     .videoCodec('prores_ks')
-    
-    //.addOptions(['-pix_fmt yuv422p10le', '-profile:v 3'])
     .addOptions(['-pix_fmt yuva444p10le', '-profile:v 3'])
-    
-    .videoFilters(
-      {
-        filter: "dctdnoiz=sigma=15:n=4"//Modificarlos con variables desde front. Define Sigma(default 0-15) y blocksize(default 3-4).
-      }
-    ) 
+    .videoFilters([`fftdnoiz=${sig}:${amount}`])
     .toFormat('mov')
     .on('progress', function(progress) {
       console.log('Progreso ' + Object.keys(progress));
       console.log('Progreso ' + progress.frames + progress);
     })
-    .output('/Volumes/SSD_02/Desarrollo_ProcVideo/Footage_salida/dctdnoiz.mov')
+    .output(salida)
     .on('error', function(err) {
     console.log(err);
     })
